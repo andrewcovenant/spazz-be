@@ -15,3 +15,4 @@ Delete: Get User: localhost:3000/user/:id
 Patch: Get User: localhost:3000/user/:id with (username, password, email) on body;
 
 NOTE: The data is saved temporary on the server cache. NO DB!
+GG
