@@ -46,6 +46,7 @@ export class UserController {
     @Body('password') password: string,
     @Body('email') email: string,
   ) {
-    return this.userService.updateUser(id, username, password, email);
+    this.userService.updateUser(id, username, password, email);
+    return null;
   }
 }
