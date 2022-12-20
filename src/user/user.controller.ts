@@ -14,39 +14,46 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  addUser(
+  async addUser(
     @Body('username') username: string,
     @Body('password') password: string,
     @Body('email') email: string,
   ) {
-    const newUserId = this.userService.insertUser(username, password, email);
+    const newUserId = await this.userService.insertUser(
+      username,
+      password,
+      email,
+    );
 
     return { id: newUserId };
   }
 
-  @Get('all')
-  getUsers() {
-    return this.userService.fetchAllUsers();
+  @Get(':id')
+  async getUser(@Param('id') id: string) {
+    const user = await this.userService.fetchUser(id);
+    return user;
   }
 
-  @Get(':id')
-  getUser(@Param('id') id: string) {
-    return this.userService.fetchUser(id);
+  @Get('all')
+  async getUsers() {
+    const users = await this.userService.fetchAllUsers();
+    return users;
   }
 
   @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(id);
+  async deleteUser(@Param('id') id: string) {
+    const user = this.userService.deleteUser(id);
+    return user;
   }
 
   @Patch(':id')
-  updateUser(
+  async updateUser(
     @Param('id') id: string,
     @Body('username') username: string,
     @Body('password') password: string,
     @Body('email') email: string,
   ) {
-    this.userService.updateUser(id, username, password, email);
+    await this.userService.updateUser(id, username, password, email);
     return null;
   }
 }
