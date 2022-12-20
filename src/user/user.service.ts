@@ -18,7 +18,7 @@ export class UserService {
   }
 
   fetchUser(id: string) {
-    return { ...this.user.find((user) => user.id === id) };
+    return { ...this.findUser(id)[0] };
   }
 
   deleteUser(id: string) {
@@ -28,9 +28,9 @@ export class UserService {
   }
 
   updateUser(id: string, username: string, password: string, email: string) {
-    const updatedUser = { ...this.user.find((user) => user.id === id) };
+    const [user, userIndex] = this.findUser(id);
+    const updatedUser = { ...user };
 
-    //Daca ai tu o metoda mai buna de a face asta, te rog sa imi spui; Ca nu imi prea place cu if-uri;
     if (username) {
       updatedUser.username = username;
     }
@@ -41,6 +41,15 @@ export class UserService {
       updatedUser.email = email;
     }
 
-    return updatedUser;
+    this.user[userIndex] = updatedUser;
+
+    return { ...updatedUser };
+  }
+
+  private findUser(id: string): [User, number] {
+    const userIndex = this.user.findIndex((user) => user.id === id);
+    const user = this.user[userIndex];
+
+    return [user, userIndex];
   }
 }
