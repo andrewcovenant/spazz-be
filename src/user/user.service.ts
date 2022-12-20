@@ -1,55 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { User } from './user.model';
 
 @Injectable()
 export class UserService {
-  private user: User[] = [];
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  insertUser(username: string, password: string, email: string) {
-    const userId = Math.random().toString();
-    const newUser = new User(userId, username, password, email);
-    this.user.push(newUser);
-
-    return userId;
+  async insertUser(
+    username: string,
+    password: string,
+    email: string,
+  ): Promise<string> {
+    const newUser = new this.userModel({ username, password, email });
+    const res = await newUser.save();
+    return res.id;
   }
 
-  fetchAllUsers() {
-    return [...this.user];
+  async fetchUser(id: string): Promise<User> {
+    const user = await this.userModel.findById(id).exec();
+    return user;
   }
 
-  fetchUser(id: string) {
-    return { ...this.findUser(id)[0] };
+  async fetchAllUsers(): Promise<User[]> {
+    const users = await this.userModel.find().exec();
+    return users;
   }
 
-  deleteUser(id: string) {
-    this.user = this.user.filter((user) => user.id !== id);
-
-    return [...this.user];
+  async deleteUser(id: string): Promise<User> {
+    const user = await this.userModel.findById(id).exec();
+    return user.remove();
   }
 
-  updateUser(id: string, username: string, password: string, email: string) {
-    const [user, userIndex] = this.findUser(id);
-    const updatedUser = { ...user };
-
-    if (username) {
-      updatedUser.username = username;
-    }
-    if (password) {
-      updatedUser.password = password;
-    }
-    if (email) {
-      updatedUser.email = email;
-    }
-
-    this.user[userIndex] = updatedUser;
-
-    return { ...updatedUser };
-  }
-
-  private findUser(id: string): [User, number] {
-    const userIndex = this.user.findIndex((user) => user.id === id);
-    const user = this.user[userIndex];
-
-    return [user, userIndex];
+  async updateUser(
+    id: string,
+    username: string,
+    password: string,
+    email: string,
+  ): Promise<User> {
+    const user = await this.userModel
+      .findByIdAndUpdate(id, { username, password, email })
+      .exec();
+    return user;
   }
 }
