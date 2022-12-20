@@ -6,27 +6,29 @@ import { User } from './user.model';
 
 @Injectable()
 export class UserService {
-  private user: User[] = [];
-
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  async insertUser(username: string, password: string, email: string) {
+  async insertUser(
+    username: string,
+    password: string,
+    email: string,
+  ): Promise<string> {
     const newUser = new this.userModel({ username, password, email });
     const res = await newUser.save();
-    return res.id as string;
+    return res.id;
   }
 
-  async fetchUser(id: string) {
+  async fetchUser(id: string): Promise<User> {
     const user = await this.userModel.findById(id).exec();
-    return user as User;
+    return user;
   }
 
-  async fetchAllUsers() {
+  async fetchAllUsers(): Promise<User[]> {
     const users = await this.userModel.find().exec();
     return users;
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string): Promise<User> {
     const user = await this.userModel.findById(id).exec();
     return user.remove();
   }
@@ -36,7 +38,7 @@ export class UserService {
     username: string,
     password: string,
     email: string,
-  ) {
+  ): Promise<User> {
     const user = await this.userModel
       .findByIdAndUpdate(id, { username, password, email })
       .exec();
