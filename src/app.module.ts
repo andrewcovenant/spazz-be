@@ -11,11 +11,7 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot(),
     UserModule,
     MongooseModule.forRoot(
-      'mongodb+srv://' +
-        process.env.MONGO_USERNAME +
-        ':' +
-        process.env.MONGO_PASSWORD +
-        '@cluster0.n57u2pe.mongodb.net/spazz?retryWrites=true&w=majority',
+      'mongodb+srv://andrewcovenant:ZNs8wZDRVmesniUD@cluster0.n57u2pe.mongodb.net/spazz?retryWrites=true&w=majority',
     ),
   ],
   controllers: [AppController],
