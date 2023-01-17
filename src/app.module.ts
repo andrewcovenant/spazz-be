@@ -4,12 +4,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { MealModule } from './meal/meal.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UserModule,
+    RestaurantModule,
+    MealModule,
     MongooseModule.forRoot(
       'mongodb+srv://' +
         process.env.MONGO_USERNAME +
