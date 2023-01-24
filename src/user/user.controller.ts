@@ -9,11 +9,17 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthService } from 'src/auth/auth.service';
 import { User } from './user.model';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post()
   async addUser(@Body() user: User) {
@@ -37,6 +43,7 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async getUser(@Param('id') id: string) {
     const user = await this.userService.fetchUser(id);
     return {
@@ -47,12 +54,14 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async deleteUser(@Param('id') id: string) {
     this.userService.deleteUser(id);
     return null;
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   async updateUser(@Param('id') id: string, @Body() user: User) {
     await this.userService.updateUser(
       id,
@@ -68,6 +77,7 @@ export class UserController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   async replaceUser(@Param('id') id: string, @Body() user: User) {
     await this.userService.updateUser(
       id,

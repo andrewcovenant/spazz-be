@@ -7,11 +7,13 @@ import { AppService } from './app.service';
 import { MealModule } from './meal/meal.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UserModule,
+    AuthModule,
     RestaurantModule,
     MealModule,
     MongooseModule.forRoot(
