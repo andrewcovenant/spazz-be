@@ -6,12 +6,12 @@ IMPORTANT! YOU NEED TO SETUP A MONGO ACCOUNT.
 1. Run npm install then npm run start:dev;
 2. Use Postman to test the endpoints;
 
-Get All Users: localhost:3000/user/all
-Get User: localhost:3000/user/:id
-Patch User: localhost:3000/user/:id
-Delete User: localhost:3000/user/:id
+ENDPOINTS:
 
-For creating a user, in PostMan add on Body (username, password, email);
+1. Create: localhost:3000/user (add body params, {username: 'username', password: 'password', email: 'email@email.com'})
+1. Get All Users: localhost:3000/user/all
+2. Get User: localhost:3000/user/:id
+3. Patch User: localhost:3000/user/:id
+4. Delete User: localhost:3000/user/:id
 
-Delete: Get User: localhost:3000/user/:id
-Patch: Get User: localhost:3000/user/:id with (username, password, email) on body;
+TO BE ADDED...
